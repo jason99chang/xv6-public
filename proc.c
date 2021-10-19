@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+//#include "user.h"
 
 struct {
   struct spinlock lock;
@@ -261,11 +262,11 @@ exit(int status)
     }
   }
 
-  // Jump into the scheduler, never to return.
-  curproc->state = ZOMBIE;
-
+  //cprintf("setting exit status to: %d\n" , status);
   curproc->exit_status = status;
 
+  // Jump into the scheduler, never to return.
+  curproc->state = ZOMBIE;
   sched();
   panic("zombie exit");
 }
@@ -290,6 +291,8 @@ wait(int *status)
       if(p->state == ZOMBIE){
         // Found one.
         pid = p->pid;
+        cprintf("exit status from process: %d\n" , p->exit_status);
+        *status = p->exit_status;
         kfree(p->kstack);
         p->kstack = 0;
         freevm(p->pgdir);
@@ -299,7 +302,6 @@ wait(int *status)
         p->killed = 0;
         p->state = UNUSED;
         release(&ptable.lock);
-        *status = p->exit_status;
         return pid;
       }
     }
