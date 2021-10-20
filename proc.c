@@ -291,7 +291,7 @@ wait(int *status)
       if(p->state == ZOMBIE){
         // Found one.
         pid = p->pid;
-        cprintf("exit status from process: %d\n" , p->exit_status);
+        //cprintf("exit status from process: %d\n" , p->exit_status);
         *status = p->exit_status;
         kfree(p->kstack);
         p->kstack = 0;
@@ -558,9 +558,11 @@ int waitpid(int given_pid, int *status, int options)
       if(p->parent != curproc)
         continue;
       havekids = 1;
-      if(p->state == ZOMBIE && p->pid == given_pid){
+      if( p->state == ZOMBIE /*p->pid == given_pid */){
         // Found one.
         pid = p->pid;
+        cprintf("exit status from process: %d\n" , p->exit_status);
+        *status = p->exit_status;
         kfree(p->kstack);
         p->kstack = 0;
         freevm(p->pgdir);
@@ -570,7 +572,6 @@ int waitpid(int given_pid, int *status, int options)
         p->killed = 0;
         p->state = UNUSED;
         release(&ptable.lock);
-        *status = p->exit_status;
         return pid;
       }
     }

@@ -70,7 +70,7 @@ int waitPid(void){
 	for (i = 0; i <5; i++) {
 		pid_a[i] = fork();
 		if (pid_a[i] == 0) { // only the child executed this code
-			printf(1, "\n The is child with PID# %d and I will exit with status %d\n", getpid(), getpid() + 4);
+			printf(1, "\n This is child with PID# %d and I will exit with status %d\n", getpid(), getpid() + 4);
 			exit(getpid() + 4);
 		}
 	}
