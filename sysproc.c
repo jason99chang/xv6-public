@@ -117,11 +117,7 @@ int sys_waitpid(void)
   if(argptr(0, (void*)&status, sizeof(*status)) < 0)
     return -1;
 
-<<<<<<< HEAD
   if(argint(0, &options) < 0)
-=======
-  if(argptr(1, (void*)&status, sizeof(*status)) < 0)
->>>>>>> feb45f1d41e1a23fce5dd1f7467ae5b8502082d9
     return -1;
 
   return waitpid(pid, status, options);
