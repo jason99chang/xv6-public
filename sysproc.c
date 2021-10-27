@@ -122,3 +122,15 @@ int sys_waitpid(void)
 
   return waitpid(pid, status, options);
 }
+
+int
+sys_setpriority(void)
+{
+  int prior;
+
+  if(argint(0, &prior) < 0)
+    return -1;
+
+  setpriority(prior);
+  return 0;  // not reached
+}

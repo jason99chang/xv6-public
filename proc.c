@@ -587,3 +587,10 @@ int waitpid(int given_pid, int *status, int options)
   }
 
 }
+
+void setpriority(int prior)
+{
+  struct proc *curproc = myproc();
+
+  curproc->priority = prior;
+}

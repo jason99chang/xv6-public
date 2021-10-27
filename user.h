@@ -25,6 +25,7 @@ int sleep(int);
 int uptime(void);
 void greeting(void);  //lab 1 example
 int waitpid(int, int*, int);
+void setpriority(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -122,6 +122,7 @@ void            wakeup(void*);
 void            yield(void);
 void            greeting(void);  //lab 1 example
 int             waitpid(int, int*, int);  //lab 1
+void            setpriority(int);  //lab 2
 
 // swtch.S
 void            swtch(struct context**, struct context*);
