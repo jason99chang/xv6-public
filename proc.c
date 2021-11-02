@@ -332,6 +332,7 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
+  int highest; //highest process priority (lab2)
   
   for(;;){
     // Enable interrupts on this processor.
@@ -339,7 +340,20 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+    highest = 31;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+
+      if(p->priority < highest)
+      {
+        highest = p->priority;
+        //cprintf("highest = %d\n" , highest);
+      }
+
+      //cprintf("highest = %d " , highest);
+
+      if(p->priority != highest)
+        continue;
+
       if(p->state != RUNNABLE)
         continue;
 
@@ -593,5 +607,7 @@ void setpriority(int prior)
   struct proc *curproc = myproc();
 
   curproc->priority = prior;
+
+  //cprintf("priority = %d\n" , curproc->priority);
 
 }
