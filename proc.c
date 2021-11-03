@@ -340,17 +340,16 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    highest = 31;
+    highest = 31; //priority 0 - 31, 0 is highest
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 
       if(p->state != RUNNABLE)
         continue;
 
+      //look for the highest priority
       if(p->priority < highest)
-      {
         highest = p->priority;
-        //cprintf("highest = %d\n" , highest);
-      }
+      
     }
 
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -358,7 +357,7 @@ scheduler(void)
       if(p->state != RUNNABLE)
         continue;
 
-      if(p->priority != highest)
+      if(p->priority != highest) //if not highest priority skip
         continue;
 
       // Switch to chosen process.  It is the process's job
