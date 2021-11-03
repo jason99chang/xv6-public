@@ -343,18 +343,22 @@ scheduler(void)
     highest = 31;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 
+      if(p->state != RUNNABLE)
+        continue;
+
       if(p->priority < highest)
       {
         highest = p->priority;
         //cprintf("highest = %d\n" , highest);
       }
+    }
 
-      //cprintf("highest = %d " , highest);
-
-      if(p->priority != highest)
-        continue;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 
       if(p->state != RUNNABLE)
+        continue;
+
+      if(p->priority != highest)
         continue;
 
       // Switch to chosen process.  It is the process's job
