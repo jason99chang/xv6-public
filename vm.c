@@ -225,9 +225,15 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   uint a;
 
   if(newsz >= KERNBASE)
+  {
+    cprintf("into kernbase\n");
     return 0;
+  }
   if(newsz < oldsz)
+  {
+    cprintf("new < old\n");
     return oldsz;
+  }
 
   a = PGROUNDUP(oldsz);
   for(; a < newsz; a += PGSIZE){
@@ -323,6 +329,23 @@ copyuvm(pde_t *pgdir, uint sz)
   if((d = setupkvm()) == 0)
     return 0;
   for(i = 0; i < sz; i += PGSIZE){
+    if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
+      panic("copyuvm: pte should exist");
+    if(!(*pte & PTE_P))
+      panic("copyuvm: page not present");
+    pa = PTE_ADDR(*pte);
+    flags = PTE_FLAGS(*pte);
+    if((mem = kalloc()) == 0)
+      goto bad;
+    memmove(mem, (char*)P2V(pa), PGSIZE);
+    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
+      kfree(mem);
+      goto bad;
+    }
+  }
+
+  //copy pages in the stack
+  for(i = KERNBASE - 2*PGSIZE; i < KERNBASE - PGSIZE; i += PGSIZE){
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
       panic("copyuvm: pte should exist");
     if(!(*pte & PTE_P))
