@@ -77,6 +77,13 @@ trap(struct trapframe *tf)
             cpuid(), tf->cs, tf->eip);
     lapiceoi();
     break;
+  case T_PGFLT:
+    cprintf("page fault at adress: %x\n", rcr2());
+    cprintf("allocating new page\n");
+    uint b = allocuvm(myproc()->pgdir, rcr2() - PGSIZE, rcr2());
+    cprintf("top of new page: %x\n", b);
+
+    break;
 
   //PAGEBREAK: 13
   default:

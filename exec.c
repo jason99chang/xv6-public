@@ -62,9 +62,9 @@ exec(char *path, char **argv)
 
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible.  Use the second as the user stack.
-  //sz = PGROUNDUP(sz);
-  //cprintf("moving stack to kernbase - pagsize\n");
+  //sz = PGROUNDUP(sz); <----- Old code
   //if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0) //<---- Old code
+
   //move stack to the top (lab 3)
   if((sp = allocuvm(pgdir, KERNBASE - 2*PGSIZE, KERNBASE - PGSIZE)) == 0)
     goto bad;
