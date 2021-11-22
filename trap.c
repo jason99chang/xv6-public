@@ -82,7 +82,6 @@ trap(struct trapframe *tf)
     cprintf("allocating new page\n");
     uint b = allocuvm(myproc()->pgdir, rcr2() - PGSIZE, rcr2());
     cprintf("top of new page: %x\n", b);
-
     break;
 
   //PAGEBREAK: 13

@@ -38,7 +38,6 @@ fetchstr(uint addr, char **pp)
     //return -1;
   *pp = (char*)addr;
 
-  //cprintf("accessing sp\n");
   ep = (char*)curproc->sz;
   for(s = *pp; s < ep; s++){
     if(*s == 0)
